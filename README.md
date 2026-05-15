@@ -127,4 +127,4 @@ All person names, client names, and project names have been anonymised.
 ## About
 
 **Brandon Muchenje** | AI Governance and Risk Specialist
-brandonmuchenje01@gmail.com | [github.com/brandonmuch](https://github.com/brandonmuch)
+brandonmuchenje01@gmail.com
