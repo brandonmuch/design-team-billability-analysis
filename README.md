@@ -1,109 +1,130 @@
-# Design Team Workflow and Billability Analysis
-
-A full data science pipeline applied to anonymised time-tracking data from a design team in the South African TV and entertainment industry. The project covers data cleaning, exploratory data analysis, feature engineering and machine learning classification.
-
----
-
-## Project Overview
-
-This project analyses how a creative design team allocates billable versus non-billable time across clients, projects and days of the week. A Random Forest classification model is then built to predict whether a given task entry will be billable based on team and project context.
-
-The dataset is drawn from real internal time-tracking data, anonymised to protect client and team confidentiality.
+# Design Team Billability Analysis
+### Operational Data Governance | Workforce Analytics | Data Quality Audit
 
 ---
 
-## Key Findings
+## Overview
 
-| Metric | Finding |
+An end-to-end data governance and analytics pipeline applied to anonymised
+time-tracking data from a broadcast and digital entertainment design team.
+This project covers data quality auditing, operational risk identification,
+and classification modelling — with a deliberate ethical framework around
+individual-level data use.
+
+---
+
+## Project Summary
+
+| Item | Detail |
 |---|---|
-| Total entries analysed | 503 clean rows after data wrangling |
-| Billable hours share | 92.1% of all logged hours are billable |
-| Non-billable hours share | 7.9% spent on administrative and internal work |
-| Busiest day | Monday carries the highest billable hours |
-| Weekend work | Recurring weekend work confirmed across the team |
-| Typical task size | Most entries are under 2 hours |
-| Model accuracy | High accuracy limited by class imbalance in small dataset |
+| **Dataset** | 503 rows of anonymised time-tracking data |
+| **Source** | South African broadcast and digital entertainment design team |
+| **Scope** | February 2026 operational period |
+| **Objective** | Audit data quality, identify billing inefficiencies, classify billable vs non-billable tasks |
 
 ---
 
-## Tools and Technologies
+## Data Governance Approach
 
-| Tool | Purpose |
-|---|---|
-| Python (Pandas, NumPy) | Data cleaning, wrangling and analysis |
-| Matplotlib and Seaborn | Data visualisation with colorblind-safe palette |
-| Scikit-learn | Feature engineering, Random Forest classification, model evaluation |
-| SQL | Exploratory data analysis |
-| Jupyter Notebooks | Analysis environment |
+### Data Quality Audit
+Before any analysis, a structured quality assessment was conducted across all fields:
 
----
+| Column | Issue | Governance Action |
+|---|---|---|
+| Client | 7 missing values | Flagged as data entry gap |
+| Project Code | 7 missing values | Flagged for process review |
+| Logged Fee | 510 missing values (entire column) | Identified as critical governance failure |
+| Billable Hours | 6 missing values | Flagged for remediation |
+| Non-Billable Hours | 6 missing values | Flagged for remediation |
 
-## Project Structure
+**Key Finding:** The complete absence of fee data across all 503 rows represents
+a material operational risk — billing decisions were being made without a
+governed data trail.
 
-```
-design-team-billability-analysis/
-│
-├── team_data_pipeline.ipynb    # Full analysis notebook
-├── team_data.csv               # Anonymised time-tracking dataset
-└── README.md
-```
+### Ethical Boundaries
+A deliberate governance decision was made to exclude individual-level analysis
+from this project. Analysing performance by person without proper HR governance
+frameworks risks unfair assessment and policy violations. All analysis is scoped
+to clients, projects, and task categories only.
 
 ---
 
 ## Pipeline Overview
 
-**Step 1 - Data Loading and Exploration**
-Initial inspection of 510 rows across 11 columns including person, role, department, client, project, date and logged hours. Summary statistics revealed anomalies requiring cleaning.
+### 1. Data Cleaning (SQL)
+- Identified and documented all NULL values across all fields
+- Standardised categorical fields for consistency
+- Applied structured transformation queries with documented rationale
 
-**Step 2 - Data Cleaning**
-Removed 5 junk rows that were report summary rows accidentally included in the export. Dropped 2 rows with null values representing 0.4% of data. Converted date column from object to datetime. Converted logged fee column from text to numeric and found it entirely null, confirming inconsistent data capture. Column was dropped. Final clean dataset: 503 rows, 10 columns.
+### 2. Exploratory Data Analysis (Python)
+- Distribution of billable vs non-billable hours by project and client
+- Time trend analysis across the operational period
+- Identification of task categories with highest non-billable concentration
 
-**Step 3 - Exploratory Data Analysis**
-Visualised billable versus non-billable hours per designer, overall team split, hours logged over time, hours by day of week and distribution of task sizes. Key insight: 92.1% billability rate indicates a highly productive and client-focused team. Recurring weekend work reflects broadcast deadline culture in the TV and entertainment industry.
+### 3. Feature Engineering
+- Created `billable_ratio` feature (billable hours divided by total hours)
+- Extracted temporal features including day of week
+- Created binary `is_billable` target variable for classification
 
-**Step 4 - Feature Engineering**
-Created three new features for the classification model: Is_Billable as the binary target variable, Total_Hours as the combined hours per entry, and Day_of_Week_Num as a numeric encoding of day. Categorical columns encoded using LabelEncoder.
+### 4. Classification Model
 
-**Step 5 - Model Building and Evaluation**
-Random Forest classifier trained and evaluated. Leaky features identified and removed before final model run. Class imbalance noted: 89% of entries are billable. Model limitations acknowledged honestly with recommendations for improvement on a larger dataset.
+| Item | Detail |
+|---|---|
+| **Algorithm** | Random Forest Classifier |
+| **Target** | Billable vs non-billable task classification |
+| **Evaluation** | Confusion matrix, classification report |
+
+### 5. Model Limitations
+With 503 rows, 2 clients, and 2 projects, the dataset lacks sufficient
+complexity for a robust production classifier. High accuracy reflects class
+imbalance rather than genuine predictive power. A larger, more varied dataset
+would be required before deploying in a production governance context.
 
 ---
 
-## Key Observations
+## Key Findings
 
-**Billability Rate**
-92.1% of all logged hours are billable, which is a strong efficiency metric for a creative team operating in the fast-paced TV and entertainment sector.
+- A critical data governance gap was identified — the fee column, intended as
+  the primary billing reference, was entirely unpopulated across all records
+- Non-billable time was concentrated in specific task types, suggesting process
+  design rather than individual behaviour as the root cause
+- Data entry inconsistencies across client and project code fields indicate a
+  need for structured data governance policies and input validation
 
-**Weekend Work Pattern**
-Weekend work is a recurring pattern across the team rather than an isolated incident. This reflects the broadcast deadline-driven nature of the industry where content delivery timelines do not follow a Monday to Friday schedule.
+---
 
-**Task Size Distribution**
-Most task entries are under 2 hours, consistent with a creative workflow involving frequent short turnaround deliverables. A small number of larger entries represent more complex or extended productions.
+## Relevance to AI and Data Governance
 
-**Model Limitation**
-With 503 rows, 2 clients and 2 projects, the dataset lacks sufficient complexity for a robust classifier. The high accuracy reflects class imbalance rather than genuine predictive power. A larger, more varied dataset would be required in a production environment.
+| What I Did | Governance Skill Demonstrated |
+|---|---|
+| Audited data quality across all fields before analysis | Data quality assessment and documentation |
+| Identified a critical missing data field across 503 records | Operational risk identification |
+| Applied ethical boundaries around individual-level data | Responsible data use and privacy governance |
+| Documented all transformation decisions with rationale | Data lineage and auditability |
+| Disclosed model limitations prior to any production recommendation | Responsible AI disclosure |
+| Recommended structured data governance policies based on findings | Governance advisory and remediation |
+
+---
+
+## Tools
+
+`Python` `Pandas` `Scikit-learn` `Seaborn` `Matplotlib`
+`SQL` `DB Browser for SQLite` `Jupyter Notebook`
 
 ---
 
 ## Data Note
 
-All person names, client names and project names have been anonymised. The dataset covers February 2026 and reflects the working patterns of a design team operating across broadcast and digital entertainment productions in South Africa.
+Data access for this project was formally requested from and granted by the
+relevant stakeholders prior to analysis. All records were anonymised before
+use in line with responsible data handling practices. The dataset covers
+February 2026 and reflects the working patterns of a design team operating
+across broadcast and digital entertainment productions in South Africa.
+All person names, client names, and project names have been anonymised.
 
 ---
 
-## About the Analyst
+## About
 
-**Brandon Muchenje**
-Data Analyst based in Johannesburg, South Africa
-
-- GitHub: [github.com/brandonmuch](https://github.com/brandonmuch)
-- Email: brandonmuchenje01@gmail.com
-
-**Certifications:**
-- IBM Data Science Professional Certificate, 10 courses, ACE Accredited
-- Microsoft Power BI Data Analyst Professional Certificate, In Progress
-- Data Science and Machine Learning, 360 Careers, Udemy
-
-**Education:**
-- Postgraduate Diploma in Risk Management, UNISA, Expected March 2027
-- Bachelor of Commerce in Law, Cum Laude, Monash University South Africa
+**Brandon Muchenje** | AI Governance and Risk Specialist
+brandonmuchenje01@gmail.com | [github.com/brandonmuch](https://github.com/brandonmuch)
