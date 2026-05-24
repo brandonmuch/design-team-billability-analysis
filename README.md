@@ -123,8 +123,3 @@ across broadcast and digital entertainment productions in South Africa.
 All person names, client names, and project names have been anonymised.
 
 ---
-
-## About
-
-**Brandon Muchenje** | AI Governance and Risk Specialist
-brandonmuchenje01@gmail.com
